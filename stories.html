@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Story Base - Stories</title>
+<style>
+  /* Reset & Base */
+  body, html { margin:0; padding:0; font-family:"Segoe UI",sans-serif; background:#f4f6f8; color:#333; }
+  a { text-decoration:none; color:inherit; }
+  button { cursor:pointer; font-family:"Segoe UI"; }
+
+  /* Header */
+  header { 
+    background:#fff; 
+    padding:1rem 2rem; 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    box-shadow:0 2px 8px rgba(0,0,0,0.05); 
+    position:sticky; top:0; z-index:100;
+  }
+  header h1 { color:#42a5f5; }
+  nav a { margin-left:1.5rem; color:#444; font-weight:500; transition:0.3s; }
+  nav a:hover { color:#42a5f5; }
+
+  /* Hero */
+  .hero { text-align:center; padding:4rem 2rem; background:linear-gradient(135deg,#e3f2fd,#fce4ec); border-bottom:1px solid #ddd; border-radius:0 0 20px 20px; }
+  .hero h2 { font-size:2.5rem; margin-bottom:1rem; }
+  .hero p { font-size:1.2rem; color:#555; }
+  .hero button { 
+    margin-top:1rem; 
+    background: linear-gradient(135deg,#42a5f5,#1e88e5); 
+    border:none; color:white; padding:12px 28px; border-radius:25px; font-size:1rem; transition:0.3s; 
+  }
+  .hero button:hover { transform: translateY(-3px); box-shadow:0 6px 18px rgba(0,0,0,0.2); }
+
+  /* Story List Grid */
+  .story-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:2rem; padding:3rem 2rem; }
+  .story-card { background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 8px 20px rgba(0,0,0,0.08); transition:transform 0.3s, box-shadow 0.3s; position:relative; }
+  .story-card:hover { transform:translateY(-5px); box-shadow:0 12px 25px rgba(0,0,0,0.15); }
+  .story-card img { width:100%; height:160px; object-fit:cover; }
+  .story-card .content { padding:1.2rem; }
+  .story-card h3 { margin-bottom:0.5rem; font-size:1.2rem; color:#333; }
+  .story-card p { color:#666; font-size:0.95rem; line-height:1.5; }
+  .story-card button { 
+    margin-top:0.8rem; 
+    background:#42a5f5; color:white; border:none; padding:8px 18px; border-radius:8px; transition:0.3s; 
+  }
+  .story-card button:hover { background:#1e88e5; transform:translateY(-2px); }
+
+  /* Read More content */
+  .more { display:none; color:#555; margin-top:0.5rem; font-size:0.9rem; }
+  
+  /* Footer */
+  footer { text-align:center; padding:1.5rem; background:#fafafa; border-top:1px solid #ddd; margin-top:2rem; font-size:0.9rem; color:#555; }
+
+  /* Responsive */
+  @media(max-width:768px){
+    .hero h2 { font-size:2rem; }
+    .story-list { padding:2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Story Base</h1>
+  <nav>
+    <a href="welcomepage.html">Home</a>
+    <a href="stories.html">Stories</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h2>Explore Stories That Inspire</h2>
+  <p>Thousands of stories, one platform. Find your next adventure or share your own creations.</p>
+  <button>Start Reading</button>
+</div>
+
+<section class="story-list">
+  <div class="story-card">
+    <img src="https://picsum.photos/400/200?random=1" alt="Story">
+    <div class="content">
+      <h3>The Lost Village</h3>
+      <p>A thrilling adventure of courage and discovery.</p>
+      <p class="more">Follow the journey of a young explorer who stumbles upon a mysterious village hidden deep in the mountains. Danger, secrets, and friendship await in this gripping tale.</p>
+      <button onclick="toggleMore(this)">Read More</button>
+    </div>
+  </div>
+
+  <div class="story-card">
+    <img src="https://picsum.photos/400/200?random=2" alt="Story">
+    <div class="content">
+      <h3>Moonlit Romance</h3>
+      <p>A heartwarming tale of love under the stars.</p>
+      <p class="more">Set in a small seaside town, two souls find themselves drawn together under the magic of a full moon. Will love conquer all in this charming romance?</p>
+      <button onclick="toggleMore(this)">Read More</button>
+    </div>
+  </div>
+
+  <div class="story-card">
+    <img src="https://picsum.photos/400/200?random=3" alt="Story">
+    <div class="content">
+      <h3>City of Dreams</h3>
+      <p>Stories of ambition, passion, and self-discovery.</p>
+      <p class="more">In the bustling metropolis, aspiring artists chase their dreams while navigating the highs and lows of life. Experience love, heartbreak, and triumph in this inspiring story.</p>
+      <button onclick="toggleMore(this)">Read More</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Story Base. All rights reserved.
+</footer>
+
+<script>
+  function toggleMore(button) {
+    const moreText = button.previousElementSibling;
+    if(moreText.style.display === "block") {
+      moreText.style.display = "none";
+      button.textContent = "Read More";
+    } else {
+      moreText.style.display = "block";
+      button.textContent = "Read Less";
+    }
+  }
+</script>
+
+</body>
+</html>

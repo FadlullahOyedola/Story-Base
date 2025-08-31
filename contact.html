@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story Base - Contact Us</title>
+<style>
+  body, html { margin:0; padding:0; font-family:"Segoe UI",sans-serif; background:#f4f6f8; color:#333; }
+  a { text-decoration:none; color:inherit; }
+  header { 
+    background:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; 
+    box-shadow:0 2px 8px rgba(0,0,0,0.05); position:sticky; top:0; z-index:100;
+  }
+  header h1 { color:#42a5f5; }
+  nav a { margin-left:1.5rem; color:#444; font-weight:500; transition:0.3s; }
+  nav a:hover { color:#42a5f5; }
+
+  .hero { text-align:center; padding:4rem 2rem; background:linear-gradient(135deg,#f3e5f5,#fce4ec); border-bottom:1px solid #ddd; border-radius:0 0 20px 20px; }
+  .hero h2 { font-size:2.5rem; margin-bottom:1rem; }
+  .hero p { font-size:1.2rem; color:#555; }
+
+  .contact-form { max-width:600px; margin:3rem auto; background:#fff; padding:2rem; border-radius:16px; box-shadow:0 8px 20px rgba(0,0,0,0.08); }
+  .contact-form h3 { text-align:center; margin-bottom:1.5rem; color:#42a5f5; }
+  .contact-form input, .contact-form textarea { width:100%; padding:12px; margin-bottom:1rem; border-radius:8px; border:1px solid #ccc; font-size:1rem; }
+  .contact-form button { background:#42a5f5; color:white; border:none; padding:12px 24px; border-radius:25px; font-size:1rem; transition:0.3s; width:100%; }
+  .contact-form button:hover { background:#1e88e5; transform:translateY(-2px); }
+
+  footer { text-align:center; padding:1.5rem; background:#fafafa; border-top:1px solid #ddd; margin-top:2rem; font-size:0.9rem; color:#555; }
+
+  @media(max-width:768px){
+    .hero h2 { font-size:2rem; }
+    .contact-form { padding:1.5rem; margin:2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Story Base</h1>
+  <nav>
+    <a href="welcomepage.html">Home</a>
+    <a href="stories.html">Stories</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h2 id="heroName">Contact Us</h2>
+  <p id="heroMsg">Have questions or suggestions? We’d love to hear from you.</p>
+</div>
+
+<div class="contact-form">
+  <h3>Send a Message</h3>
+  <form onsubmit="submitForm(event)">
+    <input type="text" placeholder="Your Name" id="contactName" required>
+    <input type="email" placeholder="Your Email" required>
+    <textarea rows="5" placeholder="Your Message" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<footer>
+  &copy; 2025 Story Base. All rights reserved.
+</footer>
+
+<script>
+  // --- Dynamic username ---
+  const storedName = localStorage.getItem('userName') || '';
+  if(storedName){
+    document.getElementById('heroName').textContent = `Hello, ${storedName}!`;
+    document.getElementById('heroMsg').textContent = `Have questions or suggestions, ${storedName}? We’d love to hear from you.`;
+    document.getElementById('contactName').value = storedName;
+  }
+
+  // --- Form submission simulation ---
+  function submitForm(e){
+    e.preventDefault();
+    alert("Thank you for your message! We'll get back to you shortly.");
+    e.target.reset();
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Story Base Dashboard</title>
+<style>
+  /* Base & Reset */
+  * { box-sizing:border-box; margin:0; padding:0; font-family:"Segoe UI",sans-serif; }
+  body { background:#f4f6f8; color:#333; }
+  a { text-decoration:none; color:inherit; }
+  button { cursor:pointer; border:none; }
+
+  /* Layout */
+  .container { display:flex; min-height:100vh; }
+  .sidebar { width:250px; background:#42a5f5; color:white; padding:2rem 1rem; display:flex; flex-direction:column; transition:0.3s; }
+  .sidebar h2 { margin-bottom:1.5rem; font-size:1.5rem; text-align:center; }
+  .sidebar .user { margin-bottom:2rem; text-align:center; }
+  .sidebar .user img { width:80px; height:80px; border-radius:50%; margin-bottom:0.5rem; }
+  .sidebar a { padding:0.8rem 1rem; border-radius:8px; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem; transition:0.3s; }
+  .sidebar a:hover { background: rgba(255,255,255,0.2); }
+  .sidebar a.logout { margin-top:auto; background:#e53935; justify-content:center; }
+  .sidebar a.logout:hover { background:#c62828; }
+
+  .main { flex:1; padding:2rem; overflow-y:auto; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #e3f2fd, #fce4ec); padding:2rem; border-radius:12px; text-align:center; margin-bottom:2rem; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+  .hero h1 { margin-bottom:0.5rem; }
+  .hero p { margin-bottom:1rem; font-size:1.1rem; color:#555; }
+  .hero button { background:#1e88e5; color:white; padding:12px 24px; border-radius:25px; font-size:1rem; transition:0.3s; }
+  .hero button:hover { background:#1565c0; transform:translateY(-2px); }
+
+  /* Sections */
+  section { margin-bottom:2rem; }
+  section h2 { margin-bottom:1rem; font-size:1.3rem; }
+
+  /* Story Cards */
+  .story-list { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; }
+  .story-card { background:white; border-radius:14px; overflow:hidden; min-width:220px; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:transform 0.3s; flex-shrink:0; }
+  .story-card:hover { transform:translateY(-5px); box-shadow:0 6px 18px rgba(0,0,0,0.12); }
+  .story-card img { width:100%; height:140px; object-fit:cover; border-bottom:1px solid #ddd; }
+  .story-card .content { padding:1rem; }
+  .story-card h3 { margin-bottom:0.3rem; font-size:1.1rem; }
+  .story-card p { margin-bottom:0.5rem; color:#666; font-size:0.9rem; }
+  .story-card button { background:#66bb6a; color:white; padding:8px 14px; border-radius:6px; transition:0.3s; }
+  .story-card button:hover { background:#43a047; }
+
+  /* Categories */
+  .categories { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; }
+  .category { min-width:150px; padding:1rem; border-radius:12px; font-weight:600; text-align:center; color:white; cursor:pointer; transition:0.3s; flex-shrink:0; }
+  .category:nth-child(1){background:linear-gradient(135deg,#f48fb1,#f06292);}
+  .category:nth-child(2){background:linear-gradient(135deg,#ba68c8,#9575cd);}
+  .category:nth-child(3){background:linear-gradient(135deg,#4db6ac,#26a69a);}
+  .category:nth-child(4){background:linear-gradient(135deg,#ffb74d,#ff8a65);}
+  .category:hover { transform:scale(1.05); }
+
+  /* Footer */
+  footer { text-align:center; padding:1rem; background:#fafafa; color:#555; font-size:0.9rem; border-top:1px solid #ddd; margin-top:2rem; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { height:6px; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius:3px; }
+
+  /* Responsive */
+  @media(max-width:768px){
+    .container { flex-direction:column; }
+    .sidebar { width:100%; flex-direction:row; overflow-x:auto; gap:0.5rem; padding:1rem; }
+    .sidebar a { flex:1; text-align:center; margin:0; padding:0.5rem; font-size:0.9rem; }
+    .main { padding:1rem; }
+    .hero button { width:100%; }
+    .story-card { min-width:160px; }
+    .category { min-width:120px; font-size:0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Story Base</h2>
+    <div class="user">
+      <img src="https://picsum.photos/100?random=7" alt="User"/>
+      <div id="username">Hello, Reader!</div>
+    </div>
+    <a href="#continue">📌 Continue</a>
+    <a href="#categories">📚 Categories</a>
+    <a href="#popular">🔥 Popular</a>
+    <a href="#favorites">❤️ Favorites</a>
+    <a href="#">⚙️ Settings</a>
+    <a href="#" class="logout" onclick="logout()">🚪 Logout</a>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="hero">
+      <h1 id="heroName">Welcome back, Reader!</h1>
+      <p>Continue your journey or explore something new</p>
+      <button>Start a New Story</button>
+    </div>
+
+    <section id="continue">
+      <h2>📌 Continue Reading</h2>
+      <div class="story-list" id="continueList"></div>
+    </section>
+
+    <section id="categories">
+      <h2>📚 Categories</h2>
+      <div class="categories" id="categoryList"></div>
+    </section>
+
+    <section id="popular">
+      <h2>🔥 Popular Stories</h2>
+      <div class="story-list" id="popularList"></div>
+    </section>
+
+    <section id="favorites">
+      <h2>❤️ Your Favorites</h2>
+      <div class="story-list" id="favoritesList"></div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Story Base | About | Contact | Privacy | Socials</p>
+</footer>
+
+<script>
+  // --- User Login Simulation ---
+  const storedName = localStorage.getItem('userName') || 'Reader';
+  document.getElementById('username').textContent = storedName;
+  document.getElementById('heroName').textContent = `Welcome back, ${storedName}!`;
+
+  function logout() {
+    localStorage.removeItem('userName');
+    location.href = "welcomepage.html";
+  }
+
+  // --- Demo Data ---
+  const stories = [
+    {title:"The Lost Village", chapter:"5", cover:"https://picsum.photos/400/200?random=1"},
+    {title:"Moonlit Romance", chapter:"2", cover:"https://picsum.photos/400/200?random=2"},
+    {title:"The Midnight Curse", chapter:"10", cover:"https://picsum.photos/400/200?random=3"},
+    {title:"City of Dreams", chapter:"3", cover:"https://picsum.photos/400/200?random=4"},
+    {title:"Enchanted Forest", chapter:"7", cover:"https://picsum.photos/400/200?random=5"},
+    {title:"The Broken Sword", chapter:"4", cover:"https://picsum.photos/400/200?random=6"}
+  ];
+
+  const categories = ["💖 Romance","🔪 Thriller","📚 Kids","🌍 Folklore","👻 Horror","🚀 Sci-Fi"];
+
+  function renderStories(listId, storyArray) {
+    const container = document.getElementById(listId);
+    container.innerHTML = "";
+    storyArray.forEach(story => {
+      const card = document.createElement('div');
+      card.className = 'story-card';
+      card.innerHTML = `
+        <img src="${story.cover}" alt="Story cover" loading="lazy">
+        <div class="content">
+          <h3>${story.title}</h3>
+          <p>Chapter ${story.chapter}</p>
+          <button>Read Now</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function renderCategories(listId, categoryArray){
+    const container = document.getElementById(listId);
+    container.innerHTML = "";
+    categoryArray.forEach(cat=>{
+      const div = document.createElement('div');
+      div.className='category';
+      div.textContent=cat;
+      container.appendChild(div);
+    });
+  }
+
+  renderStories('continueList', stories.slice(0,2));
+  renderCategories('categoryList', categories);
+  renderStories('popularList', stories.slice(2,5));
+  renderStories('favoritesList', stories.slice(3,6));
+
+</script>
+</body>
+</html>

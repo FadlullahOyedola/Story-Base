@@ -12,52 +12,55 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
-  /* Base & Reset */
   * { box-sizing:border-box; margin:0; padding:0; font-family:'Roboto',sans-serif; }
   body { background:#f4f6f8; color:#333; overflow-x:hidden; }
-  a { text-decoration:none; color:inherit; }
-  button { cursor:pointer; border:none; font-family:'Roboto',sans-serif; }
 
-  /* Layout */
-  header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1e88e5; color:white; position:sticky; top:0; z-index:100; }
-  header h1 { font-size:1.5rem; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:linear-gradient(90deg,#42a5f5,#1e88e5); color:white; position:sticky; top:0; z-index:100; border-bottom:3px solid #1565c0; }
+  header h1 { font-size:1.5rem; text-shadow:1px 1px 3px rgba(0,0,0,0.2); }
   header .user-area { display:flex; align-items:center; gap:1rem; }
-  header .user-area img { width:40px; height:40px; border-radius:50%; }
-  header button { background:#43a047; color:white; padding:6px 12px; border-radius:6px; transition:0.3s; }
-  header button:hover { background:#388e3c; }
+  header .user-area img { width:40px; height:40px; border-radius:50%; border:2px solid white; }
+  header button { background:#ffb74d; color:white; padding:6px 12px; border-radius:6px; font-weight:500; transition:0.3s; }
+  header button:hover { background:#ffa726; }
 
   main { padding:2rem; max-width:1200px; margin:0 auto; }
 
   .hero { background:linear-gradient(135deg,#e3f2fd,#fce4ec); padding:2rem; border-radius:12px; text-align:center; margin-bottom:2rem; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
   .hero h2 { margin-bottom:0.5rem; }
-  .hero button { margin-top:1rem; }
+  .hero button { margin-top:1rem; background:#66bb6a; color:white; padding:8px 16px; border-radius:8px; transition:0.3s; font-weight:500; }
+  .hero button:hover { background:#43a047; }
 
   section { margin-bottom:2rem; }
-  section h3 { margin-bottom:1rem; font-size:1.3rem; }
+  section h3 { margin-bottom:1rem; font-size:1.3rem; color:#1e88e5; }
 
   .story-list { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; }
   .story-card { background:white; border-radius:12px; overflow:hidden; min-width:220px; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:transform 0.3s; flex-shrink:0; }
   .story-card:hover { transform:translateY(-5px); box-shadow:0 6px 18px rgba(0,0,0,0.12); }
   .story-card img { width:100%; height:140px; object-fit:cover; }
   .story-card .content { padding:1rem; display:flex; flex-direction:column; gap:0.5rem; }
-  .story-card h4 { font-size:1rem; }
+  .story-card h4 { font-size:1rem; color:#1565c0; }
   .story-card p { font-size:0.9rem; color:#555; }
-  .story-card button { width:100%; background:#1e88e5; color:white; padding:6px 0; border-radius:6px; transition:0.3s; }
-  .story-card button:hover { background:#1565c0; }
+  .story-card button { width:100%; background:#42a5f5; color:white; padding:6px 0; border-radius:6px; font-weight:500; transition:0.3s; }
+  .story-card button:hover { background:#1e88e5; }
 
   .categories { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; margin-bottom:1rem; }
-  .category { flex-shrink:0; padding:0.5rem 1rem; border-radius:25px; font-weight:500; color:white; cursor:pointer; transition:0.3s; background:linear-gradient(135deg,#42a5f5,#1e88e5); }
+  .category { flex-shrink:0; padding:0.5rem 1rem; border-radius:25px; font-weight:500; color:white; cursor:pointer; transition:0.3s; }
+  .category:nth-child(1){background:linear-gradient(135deg,#f48fb1,#f06292);}
+  .category:nth-child(2){background:linear-gradient(135deg,#ba68c8,#9575cd);}
+  .category:nth-child(3){background:linear-gradient(135deg,#4db6ac,#26a69a);}
+  .category:nth-child(4){background:linear-gradient(135deg,#ffb74d,#ff8a65);}
+  .category:nth-child(5){background:linear-gradient(135deg,#90caf9,#42a5f5);}
+  .category:nth-child(6){background:linear-gradient(135deg,#ff8a65,#f4511e);}
   .category:hover { transform:scale(1.05); }
 
   footer { text-align:center; padding:1rem; background:#fafafa; color:#555; font-size:0.9rem; border-top:1px solid #ddd; margin-top:2rem; }
 
-  /* Modal */
   .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:200; }
   .modal-content { background:white; width:90%; max-width:800px; max-height:90%; overflow-y:auto; padding:2rem; border-radius:12px; position:relative; }
-  .modal-content h4 { margin-bottom:1rem; }
+  .modal-content h4 { margin-bottom:1rem; color:#42a5f5; }
   .close-modal { position:absolute; top:10px; right:10px; font-size:1.2rem; cursor:pointer; color:#e53935; }
+  .modal-content button { background:#ffb74d; color:white; padding:8px 16px; border-radius:8px; font-weight:500; transition:0.3s; margin-top:1rem; }
+  .modal-content button:hover { background:#ffa726; }
 
-  /* Scrollbar */
   ::-webkit-scrollbar { height:6px; width:6px; }
   ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius:3px; }
 
@@ -111,7 +114,6 @@
   <p>&copy; 2025 Story Base | About | Contact | Privacy | Socials</p>
 </footer>
 
-<!-- Modal for Chapter Reading -->
 <div class="modal" id="chapterModal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -122,130 +124,89 @@
 </div>
 
 <script>
-  // --- User Login ---
-  const storedName = localStorage.getItem('userName') || 'Reader';
-  document.getElementById('username').textContent = storedName;
-  document.getElementById('heroName').textContent = `Welcome back, ${storedName}!`;
+const storedName = localStorage.getItem('userName') || 'Reader';
+document.getElementById('username').textContent = storedName;
+document.getElementById('heroName').textContent = `Welcome back, ${storedName}!`;
 
-  function logout() {
-    localStorage.removeItem('userName');
-    location.href = "welcomepage.html";
-  }
+function logout(){ localStorage.removeItem('userName'); location.href="welcomepage.html"; }
 
-  // --- Stories Array ---
-  const stories = [];
-  for(let i=1;i<=10;i++){
-    stories.push({
-      title:"The Storm of Ravens",
-      chapter:i.toString(),
-      cover:`https://picsum.photos/400/200?random=${i}`,
-      link:`stories/storm-of-ravens/chapter${i}.html`
-    });
-  }
+const stories = [];
+for(let i=1;i<=10;i++){ stories.push({ title:"The Storm of Ravens", chapter:i.toString(), cover:`https://picsum.photos/400/200?random=${i}`, link:`stories/storm-of-ravens/chapter${i}.html` }); }
 
-  const categories = ["💖 Romance","🔪 Thriller","📚 Kids","🌍 Folklore","👻 Horror","🚀 Sci-Fi"];
+const categories = ["💖 Romance","🔪 Thriller","📚 Kids","🌍 Folklore","👻 Horror","🚀 Sci-Fi"];
+const modal=document.getElementById('chapterModal');
+const modalTitle=document.getElementById('modalTitle');
+const modalText=document.getElementById('modalText');
+let currentStory=null;
 
-  // --- Modal Variables ---
-  const modal = document.getElementById('chapterModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalText = document.getElementById('modalText');
-  let currentStory = null;
+function openModal(story, content){
+  currentStory=story;
+  modalTitle.textContent=`${story.title} - Chapter ${story.chapter}`;
+  modalText.textContent=content;
+  modal.style.display="flex";
+}
 
-  function openModal(story, content){
-    currentStory = story;
-    modalTitle.textContent = `${story.title} - Chapter ${story.chapter}`;
-    modalText.textContent = content;
-    modal.style.display = "flex";
-  }
+function closeModal(){ modal.style.display="none"; }
 
-  function closeModal(){
-    modal.style.display = "none";
-  }
+function renderStories(containerId, storyArray){
+  const container=document.getElementById(containerId);
+  container.innerHTML="";
+  storyArray.forEach(story=>{
+    const card=document.createElement('div');
+    card.className='story-card';
+    card.innerHTML=`<img src="${story.cover}" alt="Story cover"><div class="content"><h4>${story.title}</h4><p>Chapter ${story.chapter}</p><button onclick="readStory(${story.chapter})">Read Chapter</button></div>`;
+    container.appendChild(card);
+  });
+}
 
-  // --- Render Stories Function ---
-  function renderStories(containerId, storyArray){
-    const container = document.getElementById(containerId);
-    container.innerHTML = "";
-    storyArray.forEach(story=>{
-      const card = document.createElement('div');
-      card.className='story-card';
-      card.innerHTML = `
-        <img src="${story.cover}" alt="Story cover">
-        <div class="content">
-          <h4>${story.title}</h4>
-          <p>Chapter ${story.chapter}</p>
-          <button onclick="readStory(${story.chapter})">Read Chapter</button>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
+function renderCategories(listId, categoryArray){
+  const container=document.getElementById(listId);
+  container.innerHTML="";
+  categoryArray.forEach(cat=>{
+    const div=document.createElement('div');
+    div.className='category';
+    div.textContent=cat;
+    container.appendChild(div);
+  });
+}
 
-  // --- Render Categories ---
-  function renderCategories(listId, categoryArray){
-    const container = document.getElementById(listId);
-    container.innerHTML = "";
-    categoryArray.forEach(cat=>{
-      const div = document.createElement('div');
-      div.className='category';
-      div.textContent=cat;
-      container.appendChild(div);
-    });
-  }
+async function readStory(chapterNum){
+  const story=stories[chapterNum-1];
+  try{
+    const res=await fetch(story.link);
+    const html=await res.text();
+    const parser=new DOMParser();
+    const docHTML=parser.parseFromString(html,'text/html');
+    const text=docHTML.body.innerText;
+    openModal(story,text);
+    localStorage.setItem('lastReadChapter',chapterNum);
+  }catch(e){ alert('Error loading chapter.'); console.error(e); }
+}
 
-  // --- Read Chapter ---
-  async function readStory(chapterNum){
-    const story = stories[chapterNum-1];
-    try{
-      const res = await fetch(story.link);
-      const html = await res.text();
-      const parser = new DOMParser();
-      const docHTML = parser.parseFromString(html,'text/html');
-      const text = docHTML.body.innerText;
-      openModal(story,text);
-      localStorage.setItem('lastReadChapter', chapterNum);
-    }catch(e){
-      alert('Error loading chapter.');
-      console.error(e);
-    }
-  }
+async function downloadPDF(title, chapter){
+  const { jsPDF }=window.jspdf;
+  const doc=new jsPDF({unit:'pt',format:'a4'});
+  doc.setFontSize(12);
+  doc.text(`${title} - Chapter ${chapter}`,40,50);
+  try{
+    const res=await fetch(`stories/storm-of-ravens/chapter${chapter}.html`);
+    const html=await res.text();
+    const parser=new DOMParser();
+    const docHTML=parser.parseFromString(html,'text/html');
+    const text=docHTML.body.innerText;
+    const lines=doc.splitTextToSize(text,500);
+    doc.text(lines,40,80);
+    doc.save(`${title}-Chapter-${chapter}.pdf`);
+  }catch(e){ alert('Error generating PDF'); console.error(e); }
+}
 
-  // --- Download PDF ---
-  async function downloadPDF(title, chapter){
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({unit:'pt', format:'a4'});
-    doc.setFontSize(12);
-    doc.text(`${title} - Chapter ${chapter}`, 40, 50);
-    try{
-      const res = await fetch(`stories/storm-of-ravens/chapter${chapter}.html`);
-      const html = await res.text();
-      const parser = new DOMParser();
-      const docHTML = parser.parseFromString(html,'text/html');
-      const text = docHTML.body.innerText;
-      const lines = doc.splitTextToSize(text, 500);
-      doc.text(lines,40,80);
-      doc.save(`${title}-Chapter-${chapter}.pdf`);
-    }catch(e){
-      alert('Error generating PDF');
-      console.error(e);
-    }
-  }
+renderStories('continueList',stories.slice(0,2));
+renderStories('popularList',stories.slice(2,6));
+renderStories('favoritesList',stories.slice(0,2));
+renderCategories('categoryList',categories);
 
-  // --- Initialize Dashboard ---
-  renderStories('continueList', stories.slice(0,2));
-  renderStories('popularList', stories.slice(2,6));
-  renderStories('favoritesList', stories.slice(0,2));
-  renderCategories('categoryList', categories);
-
-  function startNewStory(){
-    const firstChapter = stories[0];
-    readStory(firstChapter.chapter);
-  }
-
-  // --- Close Modal on Outside Click ---
-  window.onclick = function(event){
-    if(event.target === modal) closeModal();
-  }
+function startNewStory(){ const firstChapter=stories[0]; readStory(firstChapter.chapter); }
+window.onclick=function(event){ if(event.target===modal) closeModal(); }
 </script>
 
 </body>

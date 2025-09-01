@@ -8,143 +8,116 @@
 <!-- jsPDF Library for PDF downloads -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
   /* Base & Reset */
-  * { box-sizing:border-box; margin:0; padding:0; font-family:"Segoe UI",sans-serif; }
-  body { background:#f5f6fa; color:#333; overflow-x:hidden; }
+  * { box-sizing:border-box; margin:0; padding:0; font-family:'Roboto',sans-serif; }
+  body { background:#f4f6f8; color:#333; overflow-x:hidden; }
   a { text-decoration:none; color:inherit; }
-  button { cursor:pointer; border:none; font-family:"Segoe UI",sans-serif; }
+  button { cursor:pointer; border:none; font-family:'Roboto',sans-serif; }
 
   /* Layout */
-  .container { display:flex; min-height:100vh; }
-  .sidebar { width:260px; background:#1e88e5; color:white; padding:2rem 1rem; display:flex; flex-direction:column; transition:0.3s; }
-  .sidebar h2 { margin-bottom:2rem; font-size:1.7rem; text-align:center; letter-spacing:1px; }
-  .sidebar .user { margin-bottom:2rem; text-align:center; }
-  .sidebar .user img { width:90px; height:90px; border-radius:50%; margin-bottom:0.5rem; border:2px solid #fff; }
-  .sidebar a { padding:0.9rem 1rem; border-radius:10px; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.7rem; transition:0.3s; font-weight:500; }
-  .sidebar a:hover { background: rgba(255,255,255,0.2); }
-  .sidebar a.logout { margin-top:auto; background:#e53935; justify-content:center; }
-  .sidebar a.logout:hover { background:#c62828; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1e88e5; color:white; position:sticky; top:0; z-index:100; }
+  header h1 { font-size:1.5rem; }
+  header .user-area { display:flex; align-items:center; gap:1rem; }
+  header .user-area img { width:40px; height:40px; border-radius:50%; }
+  header button { background:#43a047; color:white; padding:6px 12px; border-radius:6px; transition:0.3s; }
+  header button:hover { background:#388e3c; }
 
-  .main { flex:1; padding:2rem 2.5rem; overflow-y:auto; }
+  main { padding:2rem; max-width:1200px; margin:0 auto; }
 
-  /* Hero */
-  .hero { background: linear-gradient(135deg, #42a5f5, #1e88e5); padding:2rem; border-radius:15px; text-align:center; margin-bottom:2rem; box-shadow:0 6px 18px rgba(0,0,0,0.12); color:white; }
-  .hero h1 { margin-bottom:0.5rem; font-size:2rem; }
-  .hero p { margin-bottom:1rem; font-size:1.2rem; }
-  .hero button { background:#fff; color:#1e88e5; padding:12px 28px; border-radius:30px; font-size:1rem; font-weight:600; transition:0.3s; }
-  .hero button:hover { background:#e3f2fd; transform:translateY(-2px); }
+  .hero { background:linear-gradient(135deg,#e3f2fd,#fce4ec); padding:2rem; border-radius:12px; text-align:center; margin-bottom:2rem; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+  .hero h2 { margin-bottom:0.5rem; }
+  .hero button { margin-top:1rem; }
 
-  /* Sections */
-  section { margin-bottom:2.5rem; }
-  section h2 { margin-bottom:1rem; font-size:1.5rem; }
+  section { margin-bottom:2rem; }
+  section h3 { margin-bottom:1rem; font-size:1.3rem; }
 
-  /* Story Cards */
-  .story-list { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; scroll-behavior:smooth; }
-  .story-card { background:white; border-radius:15px; overflow:hidden; min-width:250px; box-shadow:0 6px 18px rgba(0,0,0,0.08); transition:transform 0.3s; flex-shrink:0; display:flex; flex-direction:column; }
-  .story-card:hover { transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.15); }
-  .story-card img { width:100%; height:150px; object-fit:cover; border-bottom:1px solid #ddd; }
-  .story-card .content { padding:1rem; flex:1; display:flex; flex-direction:column; justify-content:space-between; }
-  .story-card h3 { margin-bottom:0.5rem; font-size:1.2rem; }
-  .story-card p { margin-bottom:0.7rem; color:#555; font-size:0.95rem; }
-  .story-card button { background:#1e88e5; color:white; padding:8px 0; border-radius:8px; margin-bottom:5px; transition:0.3s; font-weight:600; width:100%; }
+  .story-list { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; }
+  .story-card { background:white; border-radius:12px; overflow:hidden; min-width:220px; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:transform 0.3s; flex-shrink:0; }
+  .story-card:hover { transform:translateY(-5px); box-shadow:0 6px 18px rgba(0,0,0,0.12); }
+  .story-card img { width:100%; height:140px; object-fit:cover; }
+  .story-card .content { padding:1rem; display:flex; flex-direction:column; gap:0.5rem; }
+  .story-card h4 { font-size:1rem; }
+  .story-card p { font-size:0.9rem; color:#555; }
+  .story-card button { width:100%; background:#1e88e5; color:white; padding:6px 0; border-radius:6px; transition:0.3s; }
   .story-card button:hover { background:#1565c0; }
 
-  /* Categories */
-  .categories { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; }
-  .category { min-width:150px; padding:1rem; border-radius:15px; font-weight:600; text-align:center; color:white; cursor:pointer; transition:0.3s; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-  .category:nth-child(1){background:linear-gradient(135deg,#f48fb1,#f06292);}
-  .category:nth-child(2){background:linear-gradient(135deg,#ba68c8,#9575cd);}
-  .category:nth-child(3){background:linear-gradient(135deg,#4db6ac,#26a69a);}
-  .category:nth-child(4){background:linear-gradient(135deg,#ffb74d,#ff8a65);}
-  .category:nth-child(5){background:linear-gradient(135deg,#ff8a65,#f06292);}
-  .category:nth-child(6){background:linear-gradient(135deg,#26a69a,#00acc1);}
+  .categories { display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; margin-bottom:1rem; }
+  .category { flex-shrink:0; padding:0.5rem 1rem; border-radius:25px; font-weight:500; color:white; cursor:pointer; transition:0.3s; background:linear-gradient(135deg,#42a5f5,#1e88e5); }
   .category:hover { transform:scale(1.05); }
 
-  /* Modal Reader */
-  .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:999; }
-  .modal-content { background:white; width:90%; max-width:900px; max-height:90%; overflow-y:auto; border-radius:15px; padding:2rem; position:relative; }
-  .modal-content h2 { margin-bottom:1rem; }
-  .modal-close { position:absolute; top:15px; right:15px; background:#e53935; color:white; border-radius:50%; width:35px; height:35px; display:flex; justify-content:center; align-items:center; font-size:1.2rem; cursor:pointer; }
+  footer { text-align:center; padding:1rem; background:#fafafa; color:#555; font-size:0.9rem; border-top:1px solid #ddd; margin-top:2rem; }
 
-  /* Footer */
-  footer { text-align:center; padding:1.2rem; background:#fafafa; color:#555; font-size:0.9rem; border-top:1px solid #ddd; margin-top:2rem; }
+  /* Modal */
+  .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:200; }
+  .modal-content { background:white; width:90%; max-width:800px; max-height:90%; overflow-y:auto; padding:2rem; border-radius:12px; position:relative; }
+  .modal-content h4 { margin-bottom:1rem; }
+  .close-modal { position:absolute; top:10px; right:10px; font-size:1.2rem; cursor:pointer; color:#e53935; }
 
-  /* Responsive */
+  /* Scrollbar */
+  ::-webkit-scrollbar { height:6px; width:6px; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius:3px; }
+
   @media(max-width:768px){
-    .container { flex-direction:column; }
-    .sidebar { width:100%; flex-direction:row; overflow-x:auto; gap:0.5rem; padding:1rem; }
-    .sidebar a { flex:1; text-align:center; margin:0; padding:0.5rem; font-size:0.9rem; }
-    .main { padding:1rem; }
+    .story-card { min-width:160px; }
     .hero button { width:100%; }
-    .story-card { min-width:200px; }
-    .category { min-width:120px; font-size:0.9rem; }
+    header { flex-direction:column; align-items:flex-start; gap:1rem; }
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>Story Base</h2>
-    <div class="user">
-      <img src="https://picsum.photos/100?random=7" alt="User"/>
-      <div id="username">Hello, Reader!</div>
-    </div>
-    <a href="#continue">📌 Continue</a>
-    <a href="#categories">📚 Categories</a>
-    <a href="#popular">🔥 Popular</a>
-    <a href="#favorites">❤️ Favorites</a>
-    <a href="#">⚙️ Settings</a>
-    <a href="#" class="logout" onclick="logout()">🚪 Logout</a>
+<header>
+  <h1>Story Base</h1>
+  <div class="user-area">
+    <div id="username">Hello, Reader!</div>
+    <img src="https://picsum.photos/100?random=7" alt="User"/>
+    <button onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h2 id="heroName">Welcome back, Reader!</h2>
+    <p>Continue your journey or explore something new</p>
+    <button onclick="startNewStory()">Start a New Story</button>
   </div>
 
-  <!-- Main -->
-  <div class="main">
-    <div class="hero">
-      <h1 id="heroName">Welcome back, Reader!</h1>
-      <p>Continue your journey or explore something new</p>
-      <button>Start a New Story</button>
-    </div>
+  <section id="continue">
+    <h3>📌 Continue Reading</h3>
+    <div class="story-list" id="continueList"></div>
+  </section>
 
-    <section id="continue">
-      <h2>📌 Continue Reading</h2>
-      <div class="story-list" id="continueList"></div>
-    </section>
+  <section id="popular">
+    <h3>🔥 Popular Stories</h3>
+    <div class="story-list" id="popularList"></div>
+  </section>
 
-    <section id="categories">
-      <h2>📚 Categories</h2>
-      <div class="categories" id="categoryList"></div>
-    </section>
+  <section id="favorites">
+    <h3>❤️ Your Favorites</h3>
+    <div class="story-list" id="favoritesList"></div>
+  </section>
 
-    <section id="popular">
-      <h2>🔥 Popular Stories</h2>
-      <div class="story-list" id="popularList"></div>
-    </section>
-
-    <section id="favorites">
-      <h2>❤️ Your Favorites</h2>
-      <div class="story-list" id="favoritesList"></div>
-    </section>
-  </div>
-</div>
+  <section id="categories">
+    <h3>📚 Categories</h3>
+    <div class="categories" id="categoryList"></div>
+  </section>
+</main>
 
 <footer>
   <p>&copy; 2025 Story Base | About | Contact | Privacy | Socials</p>
 </footer>
 
-<!-- Modal for reading -->
-<div class="modal" id="readerModal">
+<!-- Modal for Chapter Reading -->
+<div class="modal" id="chapterModal">
   <div class="modal-content">
-    <div class="modal-close" onclick="closeModal()">×</div>
-    <h2 id="modalTitle"></h2>
-    <div id="modalBody" style="line-height:1.6; white-space:pre-wrap; font-size:16px;"></div>
-    <div style="margin-top:15px; display:flex; gap:10px;">
-      <button onclick="increaseFont()">A+</button>
-      <button onclick="decreaseFont()">A-</button>
-      <button onclick="toggleDarkMode()">🌙</button>
-    </div>
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <h4 id="modalTitle"></h4>
+    <div id="modalText" style="white-space:pre-wrap;"></div>
+    <button onclick="downloadPDF(currentStory.title, currentStory.chapter)">Download PDF</button>
   </div>
 </div>
 
@@ -172,6 +145,42 @@
 
   const categories = ["💖 Romance","🔪 Thriller","📚 Kids","🌍 Folklore","👻 Horror","🚀 Sci-Fi"];
 
+  // --- Modal Variables ---
+  const modal = document.getElementById('chapterModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalText = document.getElementById('modalText');
+  let currentStory = null;
+
+  function openModal(story, content){
+    currentStory = story;
+    modalTitle.textContent = `${story.title} - Chapter ${story.chapter}`;
+    modalText.textContent = content;
+    modal.style.display = "flex";
+  }
+
+  function closeModal(){
+    modal.style.display = "none";
+  }
+
+  // --- Render Stories Function ---
+  function renderStories(containerId, storyArray){
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    storyArray.forEach(story=>{
+      const card = document.createElement('div');
+      card.className='story-card';
+      card.innerHTML = `
+        <img src="${story.cover}" alt="Story cover">
+        <div class="content">
+          <h4>${story.title}</h4>
+          <p>Chapter ${story.chapter}</p>
+          <button onclick="readStory(${story.chapter})">Read Chapter</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
   // --- Render Categories ---
   function renderCategories(listId, categoryArray){
     const container = document.getElementById(listId);
@@ -184,86 +193,60 @@
     });
   }
 
-  // --- Render Stories ---
-  function renderStoryCards(containerId, storyArray){
-    const container = document.getElementById(containerId);
-    container.innerHTML="";
-    storyArray.forEach(story=>{
-      const card = document.createElement('div');
-      card.className='story-card';
-      card.innerHTML=`
-        <img src="${story.cover}" alt="cover"/>
-        <div class="content">
-          <h3>${story.title}</h3>
-          <p>Chapter ${story.chapter}</p>
-          <button onclick='openReader(${story.chapter})'>Read</button>
-          <button onclick='downloadPDF("${story.title}",${story.chapter})'>Download PDF</button>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  // --- Modal Reader ---
-  const modal = document.getElementById('readerModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  let currentFontSize = 16;
-
-  async function openReader(chapter){
-    const story = stories.find(s=>s.chapter==chapter);
-    modalTitle.textContent = `${story.title} - Chapter ${chapter}`;
+  // --- Read Chapter ---
+  async function readStory(chapterNum){
+    const story = stories[chapterNum-1];
     try{
       const res = await fetch(story.link);
       const html = await res.text();
       const parser = new DOMParser();
       const docHTML = parser.parseFromString(html,'text/html');
-      modalBody.textContent = docHTML.body.innerText;
-      modal.style.display='flex';
-    }catch(err){
-      modalBody.textContent='Error loading chapter.';
+      const text = docHTML.body.innerText;
+      openModal(story,text);
+      localStorage.setItem('lastReadChapter', chapterNum);
+    }catch(e){
+      alert('Error loading chapter.');
+      console.error(e);
     }
-    localStorage.setItem('lastReadChapter',chapter);
   }
 
-  function closeModal(){ modal.style.display='none'; }
-  function increaseFont(){ currentFontSize+=2; modalBody.style.fontSize=currentFontSize+'px'; }
-  function decreaseFont(){ currentFontSize=Math.max(12,currentFontSize-2); modalBody.style.fontSize=currentFontSize+'px'; }
-  function toggleDarkMode(){ modalBody.style.background = modalBody.style.background==='black'?'white':'black'; modalBody.style.color = modalBody.style.color==='white'?'black':'white'; }
-
-  // --- PDF Download ---
+  // --- Download PDF ---
   async function downloadPDF(title, chapter){
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const story = stories.find(s=>s.chapter==chapter);
+    const doc = new jsPDF({unit:'pt', format:'a4'});
+    doc.setFontSize(12);
+    doc.text(`${title} - Chapter ${chapter}`, 40, 50);
     try{
-      const res = await fetch(story.link);
+      const res = await fetch(`stories/storm-of-ravens/chapter${chapter}.html`);
       const html = await res.text();
       const parser = new DOMParser();
       const docHTML = parser.parseFromString(html,'text/html');
-      const storyText = docHTML.body.innerText;
-      const lines = doc.splitTextToSize(storyText, 180); // wrap text
-
-      doc.setFontSize(14);
-      doc.text(`${title} - Chapter ${chapter}`,10,20);
-      let y=30;
-      lines.forEach(line=>{
-        if(y>280){ doc.addPage(); y=20; }
-        doc.text(line,10,y);
-        y+=10;
-      });
+      const text = docHTML.body.innerText;
+      const lines = doc.splitTextToSize(text, 500);
+      doc.text(lines,40,80);
       doc.save(`${title}-Chapter-${chapter}.pdf`);
-    }catch(err){
-      alert('Error downloading PDF');
+    }catch(e){
+      alert('Error generating PDF');
+      console.error(e);
     }
   }
 
-  // --- Initialize ---
-  renderCategories('categoryList',categories);
-  renderStoryCards('continueList',stories.slice(0,2));
-  renderStoryCards('popularList',stories.slice(2,5));
-  renderStoryCards('favoritesList',stories.slice(5,8));
+  // --- Initialize Dashboard ---
+  renderStories('continueList', stories.slice(0,2));
+  renderStories('popularList', stories.slice(2,6));
+  renderStories('favoritesList', stories.slice(0,2));
+  renderCategories('categoryList', categories);
 
+  function startNewStory(){
+    const firstChapter = stories[0];
+    readStory(firstChapter.chapter);
+  }
+
+  // --- Close Modal on Outside Click ---
+  window.onclick = function(event){
+    if(event.target === modal) closeModal();
+  }
 </script>
+
 </body>
 </html>

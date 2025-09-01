@@ -8,82 +8,109 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",sans-serif;}
-  body{background:#f4f6f8;color:#333;}
-  a{text-decoration:none;color:inherit;}
-  button{cursor:pointer;border:none;}
+  /* Base & Reset */
+  * { box-sizing:border-box; margin:0; padding:0; font-family:"Segoe UI",sans-serif; }
+  body { background:#f4f6f8; color:#333; }
+  a { text-decoration:none; color:inherit; }
+  button { cursor:pointer; border:none; }
 
   /* Layout */
-  .container{display:flex;min-height:100vh;}
-  .sidebar{width:250px;background:#42a5f5;color:white;padding:2rem 1rem;display:flex;flex-direction:column;transition:0.3s;}
-  .sidebar h2{margin-bottom:1.5rem;font-size:1.5rem;text-align:center;}
-  .sidebar .user{text-align:center;margin-bottom:2rem;}
-  .sidebar .user img{width:80px;height:80px;border-radius:50%;margin-bottom:0.5rem;}
-  .sidebar a{padding:0.8rem 1rem;border-radius:8px;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;transition:0.3s;}
-  .sidebar a:hover{background: rgba(255,255,255,0.2);}
-  .sidebar a.logout{margin-top:auto;background:#e53935;justify-content:center;}
-  .sidebar a.logout:hover{background:#c62828;}
+  .container { display:flex; min-height:100vh; }
+  .sidebar { width:250px; background:#42a5f5; color:white; padding:2rem 1rem; display:flex; flex-direction:column; transition:0.3s; }
+  .sidebar h2 { margin-bottom:1.5rem; font-size:1.5rem; text-align:center; }
+  .sidebar .user { margin-bottom:2rem; text-align:center; }
+  .sidebar .user img { width:80px; height:80px; border-radius:50%; margin-bottom:0.5rem; }
+  .sidebar a { padding:0.8rem 1rem; border-radius:8px; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem; transition:0.3s; letter-spacing: 0.02em; }
+  .sidebar a:hover { background: rgba(255,255,255,0.2); }
+  .sidebar a.logout { margin-top:auto; background:#e53935; justify-content:center; }
+  .sidebar a.logout:hover { background:#c62828; }
 
-  .main{flex:1;padding:2rem;overflow-y:auto;}
+  .main { flex:1; padding:2rem; overflow-y:auto; }
 
   /* Hero */
-  .hero{background: linear-gradient(135deg, #e3f2fd, #fce4ec);padding:2rem;border-radius:12px;text-align:center;margin-bottom:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
-  .hero h1{margin-bottom:0.5rem;}
-  .hero p{margin-bottom:1rem;font-size:1.1rem;color:#555;}
-  .hero button{background:#1e88e5;color:white;padding:12px 24px;border-radius:25px;font-size:1rem;transition:0.3s;}
-  .hero button:hover{background:#1565c0;transform:translateY(-2px);}
+  .hero { background: linear-gradient(135deg, #e3f2fd, #fce4ec); padding:2rem; border-radius:12px; text-align:center; margin-bottom:2rem; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+  .hero h1 { margin-bottom:0.5rem; letter-spacing: 0.03em; }
+  .hero p { margin-bottom:1rem; font-size:1.1rem; color:#555; word-spacing: 0.1em; }
+  .hero button { background:#1e88e5; color:white; padding:12px 24px; border-radius:25px; font-size:1rem; transition:0.3s; }
+  .hero button:hover { background:#1565c0; transform:translateY(-2px); }
 
   /* Sections */
-  section{margin-bottom:2rem;}
-  section h2{margin-bottom:1rem;font-size:1.3rem;}
+  section { margin-bottom:2rem; }
+  section h2 { margin-bottom:1rem; font-size:1.3rem; letter-spacing: 0.05em; }
 
   /* Search */
-  .search-container{margin-bottom:2rem;}
-  #searchInput{width:100%;padding:12px 16px;border:1px solid #ddd;border-radius:8px;font-size:1rem;transition:box-shadow 0.3s;}
-  #searchInput:focus{outline:none;box-shadow:0 0 0 3px rgba(30,136,229,0.2);}
+  .search-container { margin-bottom: 2rem; }
+  #searchInput {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: box-shadow 0.3s;
+  }
+  #searchInput:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
+  }
 
   /* Story Cards */
-  .story-list{display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.5rem;}
-  .story-card{background:white;border-radius:14px;overflow:hidden;min-width:220px;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:transform 0.3s;flex-shrink:0;}
-  .story-card:hover{transform:translateY(-5px);box-shadow:0 6px 18px rgba(0,0,0,0.12);}
-  .story-card img{width:100%;height:140px;object-fit:cover;border-bottom:1px solid #ddd;}
-  .story-card .content{padding:1rem;}
-  .story-card h3{margin-bottom:0.3rem;font-size:1.1rem;}
-  .story-card p{margin-bottom:0.5rem;color:#666;font-size:0.9rem;}
-  .story-card button{background:#66bb6a;color:white;padding:8px 14px;border-radius:6px;transition:0.3s;margin-top:5px;width:100%;}
-  .story-card button:hover{background:#43a047;}
-  .completed-badge{display:inline-block;background:#4caf50;color:white;padding:2px 8px;font-size:0.7rem;border-radius:4px;margin-bottom:5px;}
+  .story-list { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; }
+  .story-card { background:white; border-radius:14px; overflow:hidden; min-width:220px; box-shadow:0 4px 12px rgba(0,0,0,0.08); transition:transform 0.3s; flex-shrink:0; }
+  .story-card:hover { transform:translateY(-5px); box-shadow:0 6px 18px rgba(0,0,0,0.12); }
+  .story-card img { width:100%; height:140px; object-fit:cover; border-bottom:1px solid #ddd; }
+  .story-card .content { padding:1rem; }
+  .story-card h3 { margin-bottom:0.3rem; font-size:1.1rem; letter-spacing: 0.02em; }
+  .story-card p { margin-bottom:0.5rem; color:#666; font-size:0.9rem; }
+  .story-card button { background:#66bb6a; color:white; padding:8px 14px; border-radius:6px; transition:0.3s; margin-top:5px; width:100%; }
+  .story-card button:hover { background:#43a047; }
+  .completed-badge {
+    display: inline-block;
+    background: #4caf50;
+    color: white;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
 
   /* Categories */
-  .categories{display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.5rem;}
-  .category{min-width:150px;padding:1rem;border-radius:12px;font-weight:600;text-align:center;color:white;cursor:pointer;transition:0.3s;flex-shrink:0;}
+  .categories { display:flex; gap:1rem; overflow-x:auto; padding-bottom:0.5rem; }
+  .category { min-width:150px; padding:1rem; border-radius:12px; font-weight:600; text-align:center; color:white; cursor:pointer; transition:0.3s; flex-shrink:0; }
   .category:nth-child(1){background:linear-gradient(135deg,#f48fb1,#f06292);}
   .category:nth-child(2){background:linear-gradient(135deg,#ba68c8,#9575cd);}
   .category:nth-child(3){background:linear-gradient(135deg,#4db6ac,#26a69a);}
   .category:nth-child(4){background:linear-gradient(135deg,#ffb74d,#ff8a65);}
-  .category:nth-child(5){background:linear-gradient(135deg,#90caf9,#42a5f5);}
-  .category:nth-child(6){background:linear-gradient(135deg,#ff8a65,#f4511e);}
-  .category:hover{transform:scale(1.05);}
+  .category:hover { transform:scale(1.05); }
 
   /* Footer */
-  footer{text-align:center;padding:1rem;background:#fafafa;color:#555;font-size:0.9rem;border-top:1px solid #ddd;margin-top:2rem;}
+  footer { text-align:center; padding:1rem; background:#fafafa; color:#555; font-size:0.9rem; border-top:1px solid #ddd; margin-top:2rem; }
 
-  /* Modal */
-  #readerModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;}
-  #readerContent{background:white;padding:2rem;border-radius:12px;width:90%;max-width:900px;max-height:90%;overflow-y:auto;position:relative;}
-  #modalTitle{font-size:1.5rem;margin-bottom:1rem;}
-  #modalBody{font-size:16px;line-height:1.8;white-space:pre-wrap;}
-  .modal-btns{position:absolute;top:10px;right:10px;display:flex;gap:0.5rem;}
-  .modal-btns button{padding:5px 10px;font-size:0.8rem;border-radius:5px;}
+  /* Scrollbar */
+  ::-webkit-scrollbar { height:6px; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius:3px; }
 
+  /* Modal for Reader */
+  #readerModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:9999; }
+  #readerContent { background:white; padding:2rem; border-radius:12px; width:90%; max-width:900px; max-height:90%; overflow-y:auto; position:relative; }
+  #modalTitle { font-size:1.5rem; margin-bottom:1rem; }
+  #modalBody { 
+    font-size:16px; 
+    line-height:1.8; 
+    white-space:pre-wrap;
+    letter-spacing: 0.01em; 
+  }
+  .modal-btns { position:absolute; top:10px; right:10px; display:flex; gap:0.5rem; }
+  .modal-btns button { padding:5px 10px; font-size:0.8rem; border-radius:5px; }
+
+  /* Responsive */
   @media(max-width:768px){
-    .container{flex-direction:column;}
-    .sidebar{width:100%;flex-direction:row;overflow-x:auto;gap:0.5rem;padding:1rem;}
-    .sidebar a{flex:1;text-align:center;margin:0;padding:0.5rem;font-size:0.9rem;}
-    .main{padding:1rem;}
-    .hero button{width:100%;}
-    .story-card{min-width:160px;}
-    .category{min-width:120px;font-size:0.9rem;}
+    .container { flex-direction:column; }
+    .sidebar { width:100%; flex-direction:row; overflow-x:auto; gap:0.5rem; padding:1rem; }
+    .sidebar a { flex:1; text-align:center; margin:0; padding:0.5rem; font-size:0.9rem; }
+    .main { padding:1rem; }
+    .hero button { width:100%; }
+    .story-card { min-width:160px; }
+    .category { min-width:120px; font-size:0.9rem; }
   }
 </style>
 </head>
@@ -108,7 +135,7 @@
     <div class="hero">
       <h1 id="heroName">Welcome back, Reader!</h1>
       <p>Continue your journey or explore something new</p>
-      <button onclick="startNewStory()">Start a New Story</button>
+      <button>Start a New Story</button>
     </div>
 
     <section class="search-section">
@@ -159,39 +186,61 @@
 </footer>
 
 <script>
+  // --- User Login ---
   const storedName = localStorage.getItem('userName') || 'Reader';
   document.getElementById('username').textContent = storedName;
   document.getElementById('heroName').textContent = `Welcome back, ${storedName}!`;
 
-  function logout() { localStorage.removeItem('userName'); location.href='welcomepage.html'; }
-
-  // --- Stories Array (10 Chapters) ---
-  const stories=[];
-  for(let i=1;i<=10;i++){
-    stories.push({ title:'The Storm of Ravens', chapter:i, cover:`https://picsum.photos/400/200?random=${i}`, link:`stories/storm-of-ravens/chapter${i}.html`, genre:i%2===0?'Thriller':'Folklore' });
+  function logout() {
+    localStorage.removeItem('userName');
+    location.href = "index.html"; // Redirect to index.html
   }
 
-  const categories = ["💖 Romance","🔪 Thriller","📚 Kids","🌍 Folklore","👻 Horror","🚀 Sci-Fi"];
+  // --- Stories Array ---
+  const stories = [];
+  for(let i=1;i<=10;i++){
+    stories.push({
+      title: `The Storm of Ravens`,
+      chapter: i.toString(),
+      cover: `https://picsum.photos/400/200?random=${i}`,
+      link: `stories/storm-of-ravens/chapter${i}.html`,
+      genre: i % 2 === 0 ? 'Thriller' : 'Folklore'
+    });
+  }
 
-  function renderCategories(listId,cats){ const container=document.getElementById(listId); container.innerHTML=''; cats.forEach(cat=>{ const div=document.createElement('div'); div.className='category'; div.textContent=cat; div.onclick=()=>filterByCategory(cat); container.appendChild(div); }); }
+  const categories = ["💖 Romance", "🔪 Thriller", "📚 Kids", "🌍 Folklore", "👻 Horror", "🚀 Sci-Fi"];
 
-  function renderStoryCards(containerId,storyArray){
-    const container=document.getElementById(containerId);
-    container.innerHTML='';
-    const favorites=JSON.parse(localStorage.getItem('favorites'))||[];
-    const completed=JSON.parse(localStorage.getItem('completedChapters'))||[];
-    storyArray.forEach(story=>{
-      const isFav=favorites.includes(story.chapter);
-      const isCompleted=completed.includes(story.chapter);
-      const card=document.createElement('div');
-      card.className='story-card';
-      card.innerHTML=`
+  // --- Render Categories ---
+  function renderCategories(listId, categoryArray){
+    const container = document.getElementById(listId);
+    container.innerHTML = "";
+    categoryArray.forEach(cat => {
+      const div = document.createElement('div');
+      div.className = 'category';
+      div.textContent = cat;
+      div.onclick = () => filterByCategory(cat);
+      container.appendChild(div);
+    });
+  }
+
+  // --- Render Story Cards ---
+  function renderStoryCards(containerId, storyArray){
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const completedChapters = JSON.parse(localStorage.getItem('completedChapters')) || [];
+    storyArray.forEach(story => {
+      const isFav = favorites.includes(story.chapter);
+      const isCompleted = completedChapters.includes(story.chapter);
+      const card = document.createElement('div');
+      card.className = 'story-card';
+      card.innerHTML = `
         <img src="${story.cover}" alt="cover"/>
         <div class="content">
           <h3>${story.title}</h3>
           <p>Chapter ${story.chapter}</p>
-          ${isCompleted?'<span class="completed-badge">✅ Completed</span>':''}
-          <button onclick='openReader(${story.chapter})'>${isCompleted?'Re-read':'Read'}</button>
+          ${isCompleted ? '<span class="completed-badge">✅ Completed</span>' : ''}
+          <button onclick='openReader(${story.chapter})'>${isCompleted ? 'Re-read' : 'Read'}</button>
           <button onclick='downloadPDF("${story.title}",${story.chapter})'>Download PDF</button>
           <button style="background:${isFav?"#ff4081":"#1e88e5"}" onclick='toggleFavorite(${story.chapter}, this)'>${isFav?"★ Favorited":"☆ Favorite"}</button>
         </div>
@@ -200,89 +249,157 @@
     });
   }
 
-  function toggleFavorite(chapter,btn){
-    let favorites=JSON.parse(localStorage.getItem('favorites'))||[];
-    if(favorites.includes(chapter)){ favorites=favorites.filter(c=>c!==chapter); btn.textContent='☆ Favorite'; btn.style.background="#1e88e5"; }
-    else{ favorites.push(chapter); btn.textContent='★ Favorited'; btn.style.background="#ff4081"; }
-    localStorage.setItem('favorites',JSON.stringify(favorites));
-    renderStoryCards('favoritesList',stories.filter(s=>favorites.includes(s.chapter)));
-    renderStoryCards('continueList',getContinueStories());
+  // --- Favorite Toggle ---
+  function toggleFavorite(chapter, btn){
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    if(favorites.includes(chapter)){
+      favorites = favorites.filter(c => c!==chapter);
+      btn.textContent = "☆ Favorite";
+      btn.style.background="#1e88e5";
+    } else {
+      favorites.push(chapter);
+      btn.textContent = "★ Favorited";
+      btn.style.background="#ff4081";
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    renderStoryCards('favoritesList', stories.filter(s=>favorites.includes(s.chapter)));
+    renderStoryCards('continueList', getContinueStories());
   }
 
-  function getContinueStories(){ const lastRead=parseInt(localStorage.getItem('lastReadChapter'))||1; return stories.slice(lastRead-1,lastRead+1); }
+  // --- Continue Stories ---
+  function getContinueStories(){
+    const lastRead = parseInt(localStorage.getItem('lastReadChapter')) || 1;
+    return stories.slice(lastRead - 1, lastRead + 1);
+  }
 
-  const modal=document.getElementById('readerModal');
-  const modalTitle=document.getElementById('modalTitle');
-  const modalBody=document.getElementById('modalBody');
-  let currentFontSize=16;
+  // --- Modal Reader ---
+  const modal = document.getElementById('readerModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+  let currentFontSize = 16;
 
-  async function openReader(chapter){
-    const story=stories.find(s=>s.chapter==chapter);
-    modalTitle.textContent=`${story.title} - Chapter ${chapter}`;
-    try{
-      const res=await fetch(story.link);
-      const html=await res.text();
-      const parser=new DOMParser();
-      const docHTML=parser.parseFromString(html,'text/html');
-      modalBody.textContent=docHTML.body.innerText;
-      modal.style.display='flex';
-      localStorage.setItem('lastReadChapter',chapter);
-      markChapterAsCompleted(chapter);
-    }catch(err){ modalBody.textContent='Error loading chapter.'; }
+  async function openReader(chapter) {
+    const story = stories.find(s => s.chapter == chapter);
+    modalTitle.textContent = `${story.title} - Chapter ${chapter}`;
+    try {
+      const res = await fetch(story.link);
+      const html = await res.text();
+      const parser = new DOMParser();
+      const docHTML = parser.parseFromString(html, 'text/html');
+      modalBody.textContent = docHTML.body.innerText;
+      modal.style.display = 'flex';
+      localStorage.setItem('lastReadChapter', chapter);
+      
+      const closeBtn = document.querySelector('#readerContent .modal-btns button:last-child');
+      closeBtn.onclick = () => {
+        closeModal();
+        markChapterAsCompleted(chapter);
+      };
+    } catch (err) {
+      modalBody.textContent = 'Error loading chapter.';
+    }
   }
 
   function closeModal(){ modal.style.display='none'; }
   function increaseFont(){ currentFontSize+=2; modalBody.style.fontSize=currentFontSize+'px'; }
   function decreaseFont(){ currentFontSize=Math.max(12,currentFontSize-2); modalBody.style.fontSize=currentFontSize+'px'; }
-  function toggleDarkMode(){ if(modalBody.style.background==='black'){ modalBody.style.background='white'; modalBody.style.color='black'; } else{ modalBody.style.background='black'; modalBody.style.color='white'; } }
-
-  function markChapterAsCompleted(chapter){
-    let completed=JSON.parse(localStorage.getItem('completedChapters'))||[];
-    if(!completed.includes(chapter)){ completed.push(chapter); localStorage.setItem('completedChapters',JSON.stringify(completed)); renderStoryCards('continueList',getContinueStories()); renderStoryCards('popularList',stories.slice(2,5)); }
+  function toggleDarkMode(){ 
+    if(modalBody.style.background === 'black'){ 
+      modalBody.style.background = 'white'; 
+      modalBody.style.color = 'black';
+    } else {
+      modalBody.style.background = 'black'; 
+      modalBody.style.color = 'white';
+    }
   }
 
-  function searchStories(){
-    const query=document.getElementById('searchInput').value.toLowerCase();
-    const filtered=stories.filter(s=>s.title.toLowerCase().includes(query) || (s.genre && s.genre.toLowerCase().includes(query)));
-    const results=document.getElementById('searchResults');
-    if(query.length>0){ results.innerHTML=`<h2>Search Results</h2><div class="story-list" id="searchList"></div>`; renderStoryCards('searchList',filtered); }
-    else{ results.innerHTML=''; }
+  // --- Chapter Completion ---
+  function markChapterAsCompleted(chapter) {
+    let completedChapters = JSON.parse(localStorage.getItem('completedChapters')) || [];
+    if (!completedChapters.includes(chapter)) {
+      completedChapters.push(chapter);
+      localStorage.setItem('completedChapters', JSON.stringify(completedChapters));
+      renderStoryCards('continueList', getContinueStories());
+      renderStoryCards('popularList', stories.slice(2, 5));
+    }
   }
 
-  function filterByCategory(category){
-    const filterText=category.slice(2).trim().toLowerCase();
-    const filtered=stories.filter(s=>s.genre && s.genre.toLowerCase()===filterText);
-    let filteredSection=document.getElementById('filteredResults');
-    if(!filteredSection){ const main=document.querySelector('.main'); filteredSection=document.createElement('section'); filteredSection.id='filteredResults'; main.appendChild(filteredSection);}
-    filteredSection.innerHTML=`<h2>Stories in ${category}</h2><div class="story-list" id="filteredList"></div>`;
-    renderStoryCards('filteredList',filtered);
+  // --- Search Functionality ---
+  function searchStories() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const filteredStories = stories.filter(story => 
+      story.title.toLowerCase().includes(query) || 
+      (story.genre && story.genre.toLowerCase().includes(query))
+    );
+    
+    let searchResultsSection = document.getElementById('searchResults');
+    if (!searchResultsSection.querySelector('.story-list')) {
+      const storyListDiv = document.createElement('div');
+      storyListDiv.className = 'story-list';
+      storyListDiv.id = 'searchList';
+      searchResultsSection.appendChild(storyListDiv);
+    }
+    
+    if (query.length > 0) {
+      searchResultsSection.innerHTML = `<h2>Search Results</h2><div class="story-list" id="searchList"></div>`;
+      renderStoryCards('searchList', filteredStories);
+    } else {
+      searchResultsSection.innerHTML = ''; 
+    }
   }
 
-  async function downloadPDF(title,chapter){
-    const { jsPDF }=window.jspdf;
-    const doc=new jsPDF();
-    const story=stories.find(s=>s.chapter==chapter);
+  // --- Category Filtering ---
+  function filterByCategory(category) {
+    const filterText = category.slice(2).trim().toLowerCase(); 
+    const filteredStories = stories.filter(story => 
+      story.genre && story.genre.toLowerCase() === filterText
+    );
+    
+    let filteredSection = document.getElementById('filteredResults');
+    if (!filteredSection) {
+      const main = document.querySelector('.main');
+      filteredSection = document.createElement('section');
+      filteredSection.id = 'filteredResults';
+      main.appendChild(filteredSection);
+    }
+    
+    filteredSection.innerHTML = `<h2>Stories in ${category}</h2><div class="story-list" id="filteredList"></div>`;
+    renderStoryCards('filteredList', filteredStories);
+  }
+
+  // --- PDF Download ---
+  async function downloadPDF(title, chapter){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const story = stories.find(s=>s.chapter==chapter);
     try{
-      const res=await fetch(story.link);
-      const html=await res.text();
-      const parser=new DOMParser();
-      const docHTML=parser.parseFromString(html,'text/html');
-      const storyText=docHTML.body.innerText;
-      const lines=doc.splitTextToSize(storyText,180);
-      doc.setFontSize(14); doc.text(`${title} - Chapter ${chapter}`,10,20);
-      let y=30; lines.forEach(line=>{ if(y>280){ doc.addPage(); y=20;} doc.text(line,10,y); y+=10;});
+      const res = await fetch(story.link);
+      const html = await res.text();
+      const parser = new DOMParser();
+      const docHTML = parser.parseFromString(html,'text/html');
+      const storyText = docHTML.body.innerText;
+      const lines = doc.splitTextToSize(storyText, 180);
+
+      doc.setFontSize(14);
+      doc.text(`${title} - Chapter ${chapter}`,10,20);
+      let y=30;
+      lines.forEach(line=>{
+        if(y>280){ doc.addPage(); y=20; }
+        doc.text(line,10,y);
+        y+=10;
+      });
       doc.save(`${title}-Chapter-${chapter}.pdf`);
-    }catch(err){ alert('Error downloading PDF'); }
+    }catch(err){
+      alert('Error downloading PDF');
+    }
   }
 
-  function startNewStory(){ openReader(1); }
-
-  renderCategories('categoryList',categories);
-  renderStoryCards('continueList',getContinueStories());
-  renderStoryCards('popularList',stories.slice(2,5));
-  const favs=JSON.parse(localStorage.getItem('favorites'))||[];
-  renderStoryCards('favoritesList',stories.filter(s=>favs.includes(s.chapter)));
+  // --- Initialize ---
+  renderCategories('categoryList', categories);
+  renderStoryCards('continueList', getContinueStories());
+  renderStoryCards('popularList', stories.slice(2, 5));
+  const favs = JSON.parse(localStorage.getItem('favorites')) || [];
+  renderStoryCards('favoritesList', stories.filter(s => favs.includes(s.chapter)));
 </script>
-
 </body>
 </html>

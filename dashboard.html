@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Story Base Dashboard</title>
 
-<!-- jsPDF Library -->
+<!-- jsPDF Library for PDF downloads -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -154,25 +154,6 @@
 
   const categories = ["💖 Romance","🔪 Thriller","📚 Kids","🌍 Folklore","👻 Horror","🚀 Sci-Fi"];
 
-  // --- Render Stories ---
-  function renderStories(listId, storyArray) {
-    const container = document.getElementById(listId);
-    container.innerHTML = "";
-    storyArray.forEach(story => {
-      const card = document.createElement('div');
-      card.className = 'story-card';
-      card.innerHTML = `
-        <img src="${story.cover}" alt="Story cover" loading="lazy">
-        <div class="content">
-          <h3>${story.title} - Chapter ${story.chapter}</h3>
-          <button onclick="location.href='${story.link}'">Read Now</button>
-          <button onclick="downloadPDF('${story.title}', ${story.chapter})">Download PDF</button>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
   // --- Render Categories ---
   function renderCategories(listId, categoryArray){
     const container = document.getElementById(listId);
@@ -185,12 +166,101 @@
     });
   }
 
+  // --- Lazy Load Chapter for Reading ---
+  async function readChapter(story){
+    try {
+      const response = await fetch(story.link);
+      const htmlContent = await response.text();
+      const readerWindow = window.open("", "_blank");
+      readerWindow.document.write(htmlContent);
+      readerWindow.document.title = `${story.title} - Chapter ${story.chapter}`;
+      localStorage.setItem('lastReadChapter', story.chapter);
+    } catch(err) {
+      alert('Failed to load story chapter.');
+      console.error(err);
+    }
+  }
+
   // --- Download PDF Function ---
-  async function downloadPDF(title, chapter) {
+  async function downloadPDF(story) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     doc.setFontSize(14);
-    doc.text(`${title} - Chapter ${chapter}`, 10, 20);
+    doc.text(`${story.title} - Chapter ${story.chapter}`, 10, 20);
 
     try {
-      const response = await fetch(`stories/storm-of-ravens/chapter${chapter}.html`);
+      const response = await fetch(story.link);
+      const htmlContent = await response.text();
+      const parser = new DOMParser();
+      const docHTML = parser.parseFromString(htmlContent, 'text/html');
+      const storyText = docHTML.body.innerText;
+      const lines = storyText.split('\n').filter(line => line.trim() !== '');
+
+      let y = 30;
+      lines.forEach(line => {
+        if (y > 280) { doc.addPage(); y = 20; }
+        doc.text(line, 10, y);
+        y += 10;
+      });
+
+      doc.save(`${story.title}-Chapter-${story.chapter}.pdf`);
+    } catch(err) {
+      alert('Failed to download PDF.');
+      console.error(err);
+    }
+  }
+
+  // --- Favorite Toggle ---
+  function toggleFavorite(chapter) {
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    if (favorites.includes(chapter)) {
+      favorites = favorites.filter(c => c !== chapter);
+    } else {
+      favorites.push(chapter);
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    renderDynamicStories();
+  }
+
+  // --- Render Dynamic Story Cards ---
+  function renderDynamicStories() {
+    const continueList = document.getElementById('continueList');
+    const popularList = document.getElementById('popularList');
+    const favoritesList = document.getElementById('favoritesList');
+
+    continueList.innerHTML = '';
+    popularList.innerHTML = '';
+    favoritesList.innerHTML = '';
+
+    const lastRead = parseInt(localStorage.getItem('lastReadChapter')) || 1;
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    stories.forEach(story => {
+      const card = document.createElement('div');
+      card.className = 'story-card';
+      card.innerHTML = `
+        <img src="${story.cover}" alt="Story cover" loading="lazy">
+        <div class="content">
+          <h3>${story.title}</h3>
+          <p>Chapter ${story.chapter}</p>
+          <button onclick="readChapter(stories[${story.chapter-1}])">Read Now</button>
+          <button onclick="downloadPDF(stories[${story.chapter-1}])">Download PDF</button>
+          <button onclick="toggleFavorite('${story.chapter}')">
+            ${favorites.includes(story.chapter) ? '❤️ Remove Favorite' : '🤍 Add Favorite'}
+          </button>
+        </div>
+      `;
+
+      // Add to appropriate section
+      if (parseInt(story.chapter) === lastRead) continueList.appendChild(card);
+      if (parseInt(story.chapter) <= 5) popularList.appendChild(card);
+      if (favorites.includes(story.chapter)) favoritesList.appendChild(card);
+    });
+  }
+
+  // --- Initial Render ---
+  renderCategories('categoryList', categories);
+  renderDynamicStories();
+</script>
+</body>
+</html>
